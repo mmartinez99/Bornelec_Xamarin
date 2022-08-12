@@ -13,7 +13,7 @@ using BornesElec;
 
 namespace Borneselec
 {
-    [Activity(Label = "Activity1", Theme = "@style/AppTheme")]
+    [Activity(Label = "Liste Bornes API", Theme = "@style/AppTheme")]
     public class Activity1 : AppCompatActivity
     {
         HttpClient client;

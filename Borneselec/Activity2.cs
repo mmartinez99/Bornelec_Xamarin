@@ -14,7 +14,7 @@ using System.Net.Http;
 
 namespace Borneselec
 {
-    [Activity(Label = "Activity2", Theme = "@style/AppTheme")]
+    [Activity(Label = "Maps", Theme = "@style/AppTheme")]
     public class Activity2 : AppCompatActivity, IOnMapReadyCallback
     {
         HttpClient client;
@@ -98,6 +98,7 @@ namespace Borneselec
 
 
                     m_map.AddMarker(new MarkerOptions().SetPosition(new LatLng(lat, lng)).SetTitle(adresse_station));
+
                 }
 
 

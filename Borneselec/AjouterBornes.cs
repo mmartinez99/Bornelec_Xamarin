@@ -1,34 +1,22 @@
 ﻿using Android.App;
-using Android.Content;
 using Android.OS;
 using Android.Runtime;
-using Android.Views;
 using Android.Widget;
 using BornesElec;
-using MongoDB.Bson;
-using MongoDB.Driver;
-using MySqlConnector;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
+using SQLiteDB.Resources.Helper;
+using BornesElec;
+using System;
 
 namespace Borneselec
 {
-    [Activity(Label = "Activity1")]
+    [Activity(Label = "AjouterBornes")]
     public class AjouterBornes : Activity
     {
-        public MongoClient client;
 
-
-        MySqlConnection conn;
-        List<Bornes> listBorne;
-     
+        ListView ListBornes;
+        List<Bornes> listesBornes = new List<Bornes>();
+        Database db;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -37,16 +25,13 @@ namespace Borneselec
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Essentials.Platform.Init(this, savedInstanceState);
 
-            SetContentView(Resource.Layout.activity_ajout);
-            Button button1 = FindViewById<Button>(Resource.Id.button1);
-            button1.Click += Button_Click;
+            SetContentView(Resource.Layout.formBornes);
+            Createdatabase();
 
+            Liste = FindViewById<ListView>(Resource.Id.listView);
 
-
-        }
-        private void Button_Click(object sender, EventArgs e)
-        {
             TextView name = FindViewById<TextView>(Resource.Id.name2);
+            TextView id = FindViewById<TextView>(Resource.Id.id);
 
             TextView adresse = FindViewById<TextView>(Resource.Id.adresse2);
             TextView ville = FindViewById<TextView>(Resource.Id.ville2);
@@ -55,31 +40,118 @@ namespace Borneselec
             TextView lng = FindViewById<TextView>(Resource.Id.lng2);
             TextView tarif = FindViewById<TextView>(Resource.Id.tarif2);
 
+            Button button1 = FindViewById<Button>(Resource.Id.button1);
+            button1.Click += button1_Click;
 
-            string conString = "Database=borneselec;Data Source=localhost;User Id='root'; Password='';";
-            this.conn = new MySqlConnection(conString);
+            Button btnEdit = FindViewById<Button>(Resource.Id.btnEdit);
+            btnEdit.Click += btnEdit_Click;
 
-            try
-            {
-                conn.Open();
+            Button btnDelete = FindViewById<Button>(Resource.Id.btnDelete);
+            btnDelete.Click += btnDelete_Click;
 
-                string sql1 = "insert into borne (Adresse,Ville,CodePostal,Latitude,Longitude,name) values ('" + adresse.Text + "','" + ville.Text + "','" + codepostal.Text + "','" + tarif.Text + "','" + lat.Text + "','" + lng.Text + "','" + name.Text + "')'";
-                MySqlCommand comm = new MySqlCommand(sql1, conn);
-                var reader = comm.ExecuteReaderAsync();
 
-               
-                conn.Close();
-
-                TextView erreur = FindViewById<TextView>(Resource.Id.erreur);
-                erreur.Text = "Borne";
-            }
-
-            catch
-            {
-                TextView erreur = FindViewById<TextView>(Resource.Id.erreur);
-                erreur.Text = "ERREUR";
-            }
+            Button btnList = FindViewById<Button>(Resource.Id.btnList);
+            btnList.Click += btnList_Click;
         }
+
+        private void Createdatabase()
+        {
+            db = new Database();
+            db.createDatabase();
+        }
+
+    
+        private void button1_Click(object sender, EventArgs e)
+        {
+            TextView name = FindViewById<TextView>(Resource.Id.name2);
+            TextView id = FindViewById<TextView>(Resource.Id.id);
+            TextView erreur = FindViewById<TextView>(Resource.Id.erreur);
+
+            TextView adresse = FindViewById<TextView>(Resource.Id.adresse2);
+            TextView ville = FindViewById<TextView>(Resource.Id.ville2);
+            TextView codepostal = FindViewById<TextView>(Resource.Id.codepostal2);
+            TextView lat = FindViewById<TextView>(Resource.Id.lat2);
+            TextView lng = FindViewById<TextView>(Resource.Id.lng2);
+            TextView tarif = FindViewById<TextView>(Resource.Id.tarif2);
+            Bornes borne = new Bornes()
+            {
+                name = name.Text,
+                id = int.Parse(id.Text),
+                adresse = adresse.Text,
+                ville = ville.Text,
+                codepostal = codepostal.Text,
+                tarif = tarif.Text,
+                latitude = lat.Text,
+                longitude = lng.Text
+
+            };
+            db.insertIntoTable(borne);
+            erreur.Text=("Ajouter !");
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            TextView name = FindViewById<TextView>(Resource.Id.name2);
+            TextView id = FindViewById<TextView>(Resource.Id.id);
+            TextView erreur = FindViewById<TextView>(Resource.Id.erreur);
+
+            TextView adresse = FindViewById<TextView>(Resource.Id.adresse2);
+            TextView ville = FindViewById<TextView>(Resource.Id.ville2);
+            TextView codepostal = FindViewById<TextView>(Resource.Id.codepostal2);
+            TextView lat = FindViewById<TextView>(Resource.Id.lat2);
+            TextView lng = FindViewById<TextView>(Resource.Id.lng2);
+            TextView tarif = FindViewById<TextView>(Resource.Id.tarif2);
+            Bornes borne = new Bornes()
+            {
+                name = name.Text,
+                id = int.Parse(id.Text),
+                adresse = adresse.Text,
+                ville = ville.Text,
+                codepostal = codepostal.Text,
+                tarif = tarif.Text,
+                latitude = lat.Text,
+                longitude = lng.Text
+            };
+            db.updateTable(borne);
+            erreur.Text = ("Modifier !");
+
+        }
+
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            TextView name = FindViewById<TextView>(Resource.Id.name2);
+            TextView id = FindViewById<TextView>(Resource.Id.id);
+            TextView erreur = FindViewById<TextView>(Resource.Id.erreur);
+
+            TextView adresse = FindViewById<TextView>(Resource.Id.adresse2);
+            TextView ville = FindViewById<TextView>(Resource.Id.ville2);
+            TextView codepostal = FindViewById<TextView>(Resource.Id.codepostal2);
+            TextView lat = FindViewById<TextView>(Resource.Id.lat2);
+            TextView lng = FindViewById<TextView>(Resource.Id.lng2);
+            TextView tarif = FindViewById<TextView>(Resource.Id.tarif2);
+            Bornes borne = new Bornes()
+            {
+                name = name.Text,
+                id = int.Parse(id.Text),
+                adresse = adresse.Text,
+                ville = ville.Text,
+                codepostal = codepostal.Text,
+                tarif = tarif.Text,
+                latitude = lat.Text,
+                longitude = lng.Text
+            };
+            db.removeTable(borne);
+            erreur.Text = ("Supprimer !");
+
+        }
+        private void btnList_Click(object sender, EventArgs e)
+        {
+            ListView Liste = FindViewById<ListView>(Resource.Id.listView);
+
+
+        }
+
+
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);

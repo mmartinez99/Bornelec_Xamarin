@@ -14,7 +14,7 @@ using Android.Content;
 
 namespace Borneselec
 {
-    [Activity(Label = "Activity3", Theme = "@style/AppTheme")]
+    [Activity(Label = "Accueil", Theme = "@style/AppTheme")]
     public class Activity3 : AppCompatActivity
     {
 

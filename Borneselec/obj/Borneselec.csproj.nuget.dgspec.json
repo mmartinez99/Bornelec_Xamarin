@@ -70,13 +70,17 @@
               "target": "Package",
               "version": "[1.6.1, )"
             },
-            "Xamarin.Google.Android.Material": {
+            "Xamarin.Forms": {
               "target": "Package",
-              "version": "[1.0.0.1, )"
+              "version": "[5.0.0.2515, )"
             },
             "Xamarin.GooglePlayServices.Maps": {
               "target": "Package",
               "version": "[118.0.2.1, )"
+            },
+            "sqlite-net-pcl": {
+              "target": "Package",
+              "version": "[1.8.116, )"
             }
           }
         }
